@@ -1,224 +1,325 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuanLyStudent
+namespace QuanLyStudentUpdate
 {
-    internal class QuanLyStudent
+    // =======================================================================
+    // LỚP CƠ SỞ (BASE CLASS)
+    // =======================================================================
+    public class Person
     {
-        private string maSV;
-        private string tenSV;
+        private string Maso;
+        private string Hoten;
+
+        public Person()
+        {
+            Maso = " ";
+            Hoten = " ";
+        }
+
+        public Person(string Maso, string Hoten)
+        {
+            this.Maso = Maso;
+            this.Hoten = Hoten;
+        }
+
+        public string MASO { get =>  Maso; set => Maso = value; }
+        public string HOTEN { get => Hoten; set => Hoten = value; }
+
+        public virtual void InputPerson()
+        {
+            Console.Write("Nhập Mã Số : ");
+            this.Maso = Console.ReadLine();
+            Console.Write("Nhập Họ Tên : ");
+            this.Hoten = Console.ReadLine();
+        }
+
+        public virtual void OutputPerson()
+        {
+            Console.Write("Mã Số : {0} \t| Họ Tên : {1} \t| ",this.Maso , this.Hoten);
+        }
+    }
+
+    // =======================================================================
+    // LỚP DẪN XUẤT 1: STUDENT
+    // =======================================================================
+    public class Student : Person
+     {
         private string khoaSV;
         private double diemSV;
-        
-       public QuanLyStudent()
+
+        public Student() : base() 
         {
-            maSV = " ";
-            tenSV = " ";
             khoaSV = " ";
             diemSV = 0.0;
         }
 
-        public QuanLyStudent(string maSV, string tenSV, string khoaSV, double diemSV)
+        public Student(string  Maso, string Hoten , string khoaSV , double diemSV) : base(Maso , Hoten)
         {
-            this.maSV = maSV;
-            this.tenSV = tenSV;
             this.khoaSV = khoaSV;
             this.diemSV = diemSV;
         }
 
-        public string MASV { get =>  maSV; set => maSV = value;}
-        public string TenSV { get => tenSV; set => tenSV = value;}
-        public string KHOASV { get => khoaSV; set => khoaSV = value;}
+        public string KHOASV {  get => khoaSV; set => khoaSV = value; }
         public double DIEMSV { get => diemSV; set => diemSV = value; }
-        public void InputStudent()
+
+        public override void InputPerson()
         {
-            Console.Write("Nhập Mã Số Sinh Viên : ");
-            maSV = Console.ReadLine();
-            Console.Write("Nhập Tên Sinh Viên : ");
-            tenSV = Console.ReadLine();
+            base.InputPerson();
+
             Console.Write("Nhập Khoa Sinh Viên : ");
             khoaSV = Console.ReadLine();
             Console.Write("Nhập Điểm Trung Bình Sinh Viên : ");
             diemSV = double.Parse(Console.ReadLine());
         }
 
-        public void OutputStudent()
+        public override void OutputPerson()
         {
-            Console.WriteLine("Mã Sinh Viên : {0} , Tên Sinh Viên : {1} , Khoa Sinh Viên : {2} , Điểm Trung Bình  : {3}",
-                                maSV, tenSV, khoaSV , diemSV);
+            base.OutputPerson();
+            Console.WriteLine("Khoa Sinh Viên : {0} \t| Điểm Trung Bình : {1} ", khoaSV, diemSV);
+        }
+     }
+
+    // =======================================================================
+    // LỚP DẪN XUẤT 2: TEACHER
+    // =======================================================================
+    public class Teacher : Person 
+    {
+        private string diachiGV;
+
+        public Teacher() : base() 
+        {
+            diachiGV = " ";     
+        }
+
+        public Teacher(string Maso, string Hoten, string diachiGV) : base(Maso, Hoten)
+        {
+            this.diachiGV = diachiGV;
+        }
+
+        public String DIACHIGV { get => diachiGV; set => diachiGV = value; }
+
+        public override void InputPerson()
+        {
+            base.InputPerson();
+
+            Console.Write("Nhập Địa Chỉ Giảng Viên : ");
+            diachiGV = Console.ReadLine();
+        }
+
+        public override void OutputPerson()
+        {
+            base.OutputPerson();
+
+            Console.WriteLine("Địa Chỉ Giảng Viên : {0} ",diachiGV);
         }
     }
+
     public class Program
     {
         static void Main()
         {
-            Console.InputEncoding = Encoding.UTF8;
+            Console.InputEncoding  = Encoding.UTF8;
             Console.OutputEncoding = Encoding.UTF8;
+
             bool exit = false;
-            List<QuanLyStudent> QLStudent = new List<QuanLyStudent>
+            List<Student> QuanLyStudent = new List<Student>
             {
-                new QuanLyStudent("SV001", "Lê An", "CNTT", 9.5),
-                new QuanLyStudent("SV002", "Trần Bình", "Kinh Doanh", 8.0),
-                new QuanLyStudent("SV003", "Nguyễn Cúc", "Ngoại Ngữ", 7.2),
-                new QuanLyStudent("SV004", "Phạm Duy", "CNTT", 6.8),
-                new QuanLyStudent("SV005", "Hoàng Giang", "Thiết Kế", 9.0),
-                new QuanLyStudent("SV006", "Bùi Hà", "Kinh Doanh", 7.5),
-                new QuanLyStudent("SV007", "Đỗ Khoa", "CNTT", 8.8),
-                new QuanLyStudent("SV008", "Chu Mai", "Ngoại Ngữ", 6.5),
-                new QuanLyStudent("SV009", "Lương Nam", "Thiết Kế", 9.2),
-                new QuanLyStudent("SV010", "Võ Oanh", "Kinh Doanh", 7.9)
+                new Student("SV001", "Lê An", "CNTT", 9.5),
+                new Student("SV002", "Trần Bình", "Kinh Doanh", 8.0),
+                new Student("SV003", "Nguyễn Cúc", "Ngoại Ngữ", 7.2),
+                new Student("SV004", "Phạm Duy", "CNTT", 6.8),
+                new Student("SV005", "Hoàng Giang", "Thiết Kế", 9.0),
+                new Student("SV006", "Bùi Hà", "Kinh Doanh", 7.5),
+                new Student("SV007", "Đỗ Khoa", "CNTT", 8.8),
+                new Student("SV008", "Chu Mai", "Ngoại Ngữ", 6.5),
+                new Student("SV009", "Lương Nam", "Thiết Kế", 9.2),
+                new Student("SV010", "Võ Oanh", "Kinh Doanh", 7.9)
             };
+
+            List<Teacher> QuanLyTeacher = new List<Teacher>
+            {
+                new Teacher("GV001" , "Kiều Oanh" ,"Quận 3"),                 
+                new Teacher("GV002", "Nguyễn Hải", "Quận 9"),
+                new Teacher("GV003", "Phạm Thi", "Bình Thạnh"),
+                new Teacher("GV004", "Trần Dũng", "Quận 1"),
+                new Teacher("GV005", "Võ Liên", "Quận 9")
+            };
+
             while (!exit)
             {
-                Console.WriteLine("=========================================================================================");
-                Console.WriteLine("                                 MENU CHỨC NĂNG             ");
-                Console.WriteLine("=========================================================================================");
-                Console.WriteLine("1. Thêm Sinh Viên");
-                Console.WriteLine("2. Xuất Danh Sách Sinh Viên");
-                Console.WriteLine("3. Xuất Danh Sách Sinh Viên Thuộc Khoa CNTT");
-                Console.WriteLine("4. Xuất Danh Sách Sinh Viên Có Điểm Trung Bình Lớn Hơn 5");
-                Console.WriteLine("5. Xuất Danh Sách Sinh Viên Được Sắp Xếp Tăng Dần Theo ĐTB");
-                Console.WriteLine("6. Xuất Danh Sách Sinh Viên Được Sắp Xếp Tăng Dần Theo ĐTB Và Thuộc Khoa CNTT");
-                Console.WriteLine("7. Tìm Sinh Viên Có Điểm Trung Bình Lớn Nhất Và Thuộc Khoa CNTT");
-                Console.WriteLine("8. Xuất Số Lượng Của Từng Xếp Loại Trong Danh Sách Sinh Viên.");
-                Console.WriteLine("0. Thoát");
-                Console.WriteLine("=========================================================================================");
-                Console.Write("Mời bạn chọn chức năng (0-5): ");
-
-                int choice = int.Parse(Console.ReadLine());
-
-                switch (choice)
+                DisplayMenuUniVerSity();
+                int Choice = int.Parse(Console.ReadLine());
+                switch (Choice)
                 {
                     case 1:
                         Console.WriteLine("✅ Bạn đã chọn chức năng: Thêm Sinh Viên.");
-                        ADDStudent(QLStudent);
+                        ADDStudent(QuanLyStudent);
                         break;
                     case 2:
-                        Console.WriteLine("📄 Bạn đã chọn chức năng: Xuất Danh Sách Sinh Viên.");
-                        DisPlayStudent(QLStudent);
+                        Console.WriteLine("✅ Bạn đã chọn chức năng: Thêm Giảng Viên.");
+                        ADDTeacher(QuanLyTeacher);
                         break;
                     case 3:
-                        Console.WriteLine("✅ Bạn đã chọn chức năng : Xuất Danh Sách Sinh Viên Thuộc Khoa CNTT");
-                        DisPlayStudenFacutyCNTT(QLStudent);
+                        Console.WriteLine("📄 Bạn đã chọn chức năng: Xuất Danh Sách Sinh Viên.");
+                        DisPlayStudent(QuanLyStudent);
                         break;
                     case 4:
-                        Console.WriteLine("✅ Bạn đã chọn chức năng : Xuất Danh Sách Sinh Viên Có Điểm Trung Bình Lớn Hơn 5");
-                        DisPlayStudentAVGSCore5(QLStudent);
+                        Console.WriteLine("📄 Bạn đã chọn chức năng: Xuất Danh Sách Giảng Viên.");
+                        DisPlayTeacher(QuanLyTeacher);
                         break;
                     case 5:
-                        Console.WriteLine("✅ Bạn đã chọn chức năng : Xuất Danh Sách Sinh Viên Sắp Xếp Theo ĐTB Tăng Dần");
-                        SortAVGScoreStudent(QLStudent);
+                        Console.WriteLine("🔢 Bạn đã chọn chức năng: Thống kê số lượng.");
+                        CountTeacherAndStudent(QuanLyStudent, QuanLyTeacher);
                         break;
                     case 6:
-                        Console.WriteLine("✅ Bạn đã chọn chức năng : Xuất Danh Sách Sinh Viên Có ĐTB Lớn Hơn 5 và Thuộc Khoa Công Nghệ Thông Tin");
-                        DisPlayStudentAVGScore5AndFacutyCNTT(QLStudent);
+                        Console.WriteLine("🔎 Bạn đã chọn chức năng: Xuất Danh Sách Sinh Viên Thuộc Khoa CNTT.");
+                        DisPlayStudentFacutyCNTT(QuanLyStudent);
                         break;
                     case 7:
-                        Console.WriteLine("✅ Bạn đã chọn chức năng : Xuất Sinh Viên Có Điểm Trung Bình Cao Nhất Và Thuộc Khoa CNTT");
-                        MaxAVGScoreAndFacutyCNTT(QLStudent);
+                        Console.WriteLine("🔎 Bạn đã chọn chức năng: Xuất Danh Sách Giảng Viên Ở Quận 9.");
+                        DisPlayTeacherLocationQ9(QuanLyTeacher);
                         break;
                     case 8:
-                        Console.WriteLine("✅ Bạn đã chọn chức năng : Xếp Loại Sinh Viên Và Cho Biết Số Lượng Trong Danh Sách");
-                        RatingStudent(QLStudent);
+                        Console.WriteLine("🏆 Bạn đã chọn chức năng: Xuất Sinh Viên Có Điểm Trung Bình Cao Nhất và Thuộc Khoa CNTT.");
+                        MaxScoreStudentAndFacutyCNTT(QuanLyStudent);
+                        break;
+                    case 9:
+                        Console.WriteLine("📊 Bạn đã chọn chức năng: Xếp loại học lực của Sinh viên.");
+                        RatingStudent(QuanLyStudent);
                         break;
                     case 0:
-                        Console.WriteLine("👋 Bạn đã chọn chức năng: Thoát khỏi chương trình. Tạm biệt!");
-                        exit = true;
-                        break;
-
-                    default:
-                        Console.WriteLine("⚠️ Lựa chọn không hợp lệ. Vui lòng nhập lại (0, 1, hoặc 2).");
-                        break;
-                }
+                            Console.WriteLine("👋 Bạn đã chọn chức năng: Thoát khỏi chương trình. Tạm biệt!");
+                            exit = true;
+                            break;
+                        default:
+                            Console.WriteLine("⚠️ Lựa chọn không hợp lệ. Vui lòng nhập lại (0-9).");
+                            break;
+                        }
 
             }
         }
-        static void ADDStudent(List<QuanLyStudent> QLList)
+
+        static void DisplayMenuUniVerSity()
         {
-            QuanLyStudent Student = new QuanLyStudent();
-            Student.InputStudent();
-            QLList.Add(Student);
-            Console.WriteLine("Thêm Sinh Viên Thành Công");
+            Console.WriteLine("=============================================================");
+            Console.WriteLine("               MENU CHƯƠNG TRÌNH QUẢN LÝ UniVerSity         ");
+            Console.WriteLine("=============================================================");
+            Console.WriteLine("1. Thêm Sinh Viên");
+            Console.WriteLine("2. Thêm Giảng Viên");
+            Console.WriteLine("3. Xuất Danh Sách Sinh Viên ");
+            Console.WriteLine("4. Xuất Danh Sách Giảng Viên");
+            Console.WriteLine("5. Số Lượng Từng Danh Sách ( Tổng Số Sinh Viên , Tổng Số Giảng Viên ) ");
+            Console.WriteLine("6. Xuất Danh Sách Sinh Viên Thuộc Khoa CNTT");
+            Console.WriteLine("7. Xuất Danh Sách Giảng Viên Ở Quận 9");
+            Console.WriteLine("8. Xuất Ra Danh Sách Sinh Viên Có Điểm Trung Bình Cao Nhất Và Thuộc Khoa CNTT");
+            Console.WriteLine("9. Số Lượng Của Từng Xếp Loại Trong Danh Sách , Theo Thang Điểm 10");
+            Console.WriteLine("0. Thoát");
+            Console.WriteLine("=============================================================");
+            Console.Write("Mời bạn chọn chức năng (0-9): ");
+        }
+        // Câu 1
+        static void ADDStudent(List<Student> QLStudent)
+        {
+            Student NewStudent = new Student();
+            NewStudent.InputPerson();
+            QLStudent.Add(NewStudent);
+            Console.WriteLine("Thêm 1 Sinh Viên Thành Công.");
         }
 
-        static void DisPlayStudent(List<QuanLyStudent> QLList)
+        // Câu 2
+        static void ADDTeacher(List<Teacher> QLTeacher)
         {
-            foreach (QuanLyStudent student in QLList)
-            {
-                student.OutputStudent();
-            }
+            Teacher NewTeacher = new Teacher();
+            NewTeacher.InputPerson();
+            QLTeacher.Add(NewTeacher);
+            Console.WriteLine("Thêm 1 Giảng Viên Thành Công.");
         }
 
         // Câu 3
-        static void DisPlayStudenFacutyCNTT(List<QuanLyStudent> QLList)
+        static void DisPlayStudent(List<Student> QLStudent)
         {
-            var ResultCau3 = QLList.Where(sv => sv.KHOASV == "CNTT").ToList();
-            DisPlayStudent(ResultCau3);
+            foreach(Student NewStudent in  QLStudent)
+            {
+                NewStudent.OutputPerson();
+            }  
         }
 
         // Câu 4
-        static void DisPlayStudentAVGSCore5(List<QuanLyStudent> QLList)
+        static void DisPlayTeacher(List<Teacher> QLTeacher)
         {
-            var ResultCau4 = QLList.Where(sv => sv.DIEMSV >= 5).ToList();
-            DisPlayStudent(ResultCau4);
+            foreach(Teacher NewTeacher in QLTeacher)
+            {
+                NewTeacher.OutputPerson();
+            }    
         }
 
         // Câu 5
-        static void SortAVGScoreStudent(List<QuanLyStudent> QLList)
+        static void CountTeacherAndStudent(List<Student> QLStudent , List<Teacher> QLTeacher)
         {
-            var ResultCau5 = QLList.OrderBy(sv => sv.DIEMSV).ToList();
-            DisPlayStudent(ResultCau5);
+            Console.WriteLine("Tổng Số Sinh Viên Có Trong Danh Sách Là  : {0} ",QLStudent.Count());
+            Console.WriteLine("Tổng Số Giảng Viên Có Trong Danh Sách Là : {0} ",QLTeacher.Count());
         }
 
         // Câu 6
-        static void DisPlayStudentAVGScore5AndFacutyCNTT(List<QuanLyStudent> QLList)
+        static void DisPlayStudentFacutyCNTT(List<Student> QLStudent)
         {
-            var ResultCau6 = QLList.Where(sv => sv.DIEMSV > 5 && sv.KHOASV == "CNTT").ToList();
-            DisPlayStudent(ResultCau6);
+            var ResultStudent = QLStudent.Where(sv => sv.KHOASV == "CNTT").ToList();
+            DisPlayStudent(ResultStudent);          
         }
 
         // Câu 7
-        static void MaxAVGScoreAndFacutyCNTT(List<QuanLyStudent> QLList)
+        static void DisPlayTeacherLocationQ9(List<Teacher> QLTeacher)
         {
-            double MaxScore = QLList.Max(sv => sv.DIEMSV);
-            var ResultCau7 = QLList.Where(sv => sv.KHOASV == "CNTT" && sv.DIEMSV == MaxScore).ToList();
-            DisPlayStudent(ResultCau7);
+            var ResultTeacher = QLTeacher.Where(tc => tc.DIACHIGV == "Quận 9").ToList();
+            DisPlayTeacher(ResultTeacher);
         }
+
         // Câu 8
-        
-        static void RatingStudent(List <QuanLyStudent> QLList)
+        static void MaxScoreStudentAndFacutyCNTT(List<Student> QLStudent)
         {
-            var StudentRating = QLList.Select(sv => new
+            double MaxScore = QLStudent.Max(sv => sv.DIEMSV);
+
+            var ResultStudent = QLStudent.Where(sv => sv.KHOASV == "CNTT" && sv.DIEMSV == MaxScore).ToList();
+            DisPlayStudent(ResultStudent);
+        }
+
+        // Câu 9
+        static void RatingStudent(List<Student> QLStudent)
+        {
+            var StudentRating = QLStudent.Select(sv => new
             {
                 SinhVien = sv,
-                XepLoai = GetRatingStudent(sv.DIEMSV),
+                XepLoai = GetRating(sv.DIEMSV)
             });
 
-            var RatingCount = StudentRating.GroupBy(item => item.XepLoai).Select(Group => new
+            var CountRating = StudentRating.GroupBy(item => item.XepLoai).Select(group => new
             {
-                XepLoai = Group.Key,
-                SoLuong = Group.Count(),
+                XepLoai = group.Key,
+                SoLuong = group.Count()
             }).OrderByDescending(item => item.SoLuong).ToList();
 
-            foreach(var Rating in RatingCount)
+            foreach(var Student in CountRating)
             {
-                Console.WriteLine("Xếp Loại : {0}  , Số Lượng : {1} ", Rating.XepLoai, Rating.SoLuong);
+                Console.WriteLine("Xếp Loại      : {0}  \t| Số Lượng : {1} ", Student.XepLoai, Student.SoLuong);
             }
+
+            
         }
 
-        static string GetRatingStudent(double Score)
+        static string GetRating(double diem)
         {
-            if (Score >= 9) return "Xuất Xắc";
-            else if (Score >= 8) return "Giỏi";
-            else if (Score >= 7) return "Khá";
-            else if (Score >= 5) return "Trung Bình";
-            else if (Score >= 4) return "Yếu";
+            if (diem >= 9) return "Xuất Xắc";
+            else if (diem >= 8) return "Giỏi";
+            else if (diem >= 7) return "Khá";
+            else if (diem >= 5) return "Trung Bình";
+            else if (diem >= 4) return "Yếu";
             else return "Kém";
         }
     }
+
 }
